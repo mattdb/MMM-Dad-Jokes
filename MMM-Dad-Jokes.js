@@ -53,4 +53,28 @@ Module.register("MMM-Dad-Jokes", {
 			this.updateDom(this.config.fadeSpeed);
 		}
 	},
+
+  notificationReceived: function(notification, payload, sender) {
+
+    if (notification === 'MODULE_DOM_CREATED') {
+      // Register new joke API with MMM-Remote-Control (ignored if Remote-Control is not installed)
+      let api = {
+        module: this.name,
+        path: "dadjokes",
+        actions: {
+          newJoke: {
+            notification: "DADJOKE_NEWJOKE",
+            prettyName: "Get New Joke"
+          },
+        }
+      };
+      this.sendNotification("REGISTER_API", api);
+    }
+
+    if (notification == "DADJOKE_NEWJOKE") {
+      this.getJoke();
+    }
+
+
+  },
 });
